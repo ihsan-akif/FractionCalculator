@@ -1,6 +1,6 @@
 # fraction_calculator
 
-A new Flutter project for Lab 1 STIW2044 A192.
+This is just a simple Flutter project for Lab 1 STIW2044 A192. Thanks to Sir Hanis for teaching me how to use Flutter.
 
 ## Getting Started
 
