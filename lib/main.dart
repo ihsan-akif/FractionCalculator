@@ -8,12 +8,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<String> _operator = ['+', '-', '*', '/'];
-  String _currentItemSelected = '+';
-  final TextEditingController _aNumerator = TextEditingController();
-  final TextEditingController _bDenominator = TextEditingController();
-  final TextEditingController _cNumerator = TextEditingController();
-  final TextEditingController _dDenominator = TextEditingController();
+  //List to store all operator
+  List<String> _operator = ['+', '-', '*', '/'];    
+  String _currentItemSelected = '+';    //'+' operator will be chosen at the start
+  final TextEditingController _aNumerator = TextEditingController();    //numerator1  
+  final TextEditingController _bDenominator = TextEditingController();    //denominator1
+  final TextEditingController _cNumerator = TextEditingController();    //numerator2
+  final TextEditingController _dDenominator = TextEditingController();    //denominator2
   double nume1 = 0.0, deno1 = 0.0, nume2 = 0.0, deno2 = 0.0, nume3 = 0.0, deno3 = 0.0, result = 0.0;
   String img = "assets/fraction.png";
 
@@ -22,16 +23,17 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Material App',
       home: Scaffold(
-        backgroundColor: Colors.indigoAccent,
+        resizeToAvoidBottomPadding: false,    //to prevent bottom overload
+        backgroundColor: Colors.indigoAccent,   //apps background colour
         appBar: AppBar(
           title: Text('Fraction Calculator'),
-          backgroundColor: Colors.indigo,
-          centerTitle: true,
+          backgroundColor: Colors.indigo,   //appbar background colour
+          centerTitle: true,    //make appbar title center
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[  
-            //image code  
+            //image widget 
             Image.asset(img, height: 140.0, fit: BoxFit.cover),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -169,6 +171,7 @@ class _MyAppState extends State<MyApp> {
                     padding: EdgeInsets.fromLTRB(10, 0, 50, 30),
                     child: Padding(
                       padding: EdgeInsets.all(5),
+                      //Drop Down Button widget to choose operators
                       child: DropdownButton<String>(
                         items: _operator.map((String dropdownStringItem){
                           return DropdownMenuItem<String>(
@@ -197,14 +200,15 @@ class _MyAppState extends State<MyApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[ 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(50, 0, 50, 20),
+                  padding: EdgeInsets.all(5),
                   child: MaterialButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20.0))),
                       elevation: 5.0,
-                      minWidth: 200.0,
+                      minWidth: 150.0,
                       height: 50,
                       color: Colors.redAccent,
+                      splashColor: Colors.indigoAccent,   //make button splash when user clicked
                     child: Text("=",
                       style: TextStyle(
                         fontSize: 36.0,
@@ -213,6 +217,26 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                     onPressed: _onPressed,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(5),
+                  child: MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                      elevation: 5.0,
+                      minWidth: 150.0,
+                      height: 50,
+                      color: Colors.redAccent,
+                      splashColor: Colors.indigoAccent,   //make button splash when user clicked
+                    child: Text("Reset",
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color: Colors.amberAccent,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    onPressed: _reset,
                   ),
                 ),
               ],
@@ -264,6 +288,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
   
+  //Calculation process based on chosen operator
   void _onPressed(){
     setState((){
       nume1 = double.parse(_aNumerator.text);
@@ -294,6 +319,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
   
+  //Greatest Common Divisor (gcd). Fractions can be reduced if the numerator and denominator have a gcd greater than 1.
   double gcd(double a, double b){
     if (a == 0){
       return b;
@@ -303,12 +329,26 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  //Function to convert the obtained fraction into it's simple form
   void simplestform(){
     double commonFactor = gcd(nume3, deno3);
     deno3 = deno3 / commonFactor;
     nume3 = nume3 / commonFactor;
   }
 
+  //Reset all the text field and result text
+  void _reset(){
+    setState(() {
+      _aNumerator.text = "";
+      _bDenominator.text = "";
+      _cNumerator.text = "";
+      _dDenominator.text = "";
+      nume3 = 0.0;
+      deno3 = 0.0;
+    });
+  }
+
+  //Function to call the value (operator) selected by user
   void _onDropDownSelectedItem(String newValueSelected){
     setState(() {
       this._currentItemSelected = newValueSelected;
